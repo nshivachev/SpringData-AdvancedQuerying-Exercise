@@ -80,6 +80,42 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<String> findAllByAgeRestriction(String ageRestriction) {
+        return bookRepository
+                .findAllByAgeRestriction(AgeRestriction.valueOf(ageRestriction.toUpperCase()))
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findAllByEditionTypeAndCopiesLessThan(EditionType editionType, int copies) {
+        return bookRepository
+                .findAllByEditionTypeAndCopiesLessThan(editionType, copies)
+                .stream()
+                .map(Book::getTitle)
+                .toList();
+    }
+
+    @Override
+    public List<String> findAllByPriceLessThanOrPriceGreaterThan(int priceLessThan, int priceGreaterThan) {
+        return bookRepository
+                .findAllByPriceLessThanOrPriceGreaterThan(new BigDecimal(priceLessThan), new BigDecimal(priceGreaterThan))
+                .stream()
+                .map(book -> String.format("%s - $%.2f", book.getTitle(), book.getPrice()))
+                .toList();
+    }
+
+    @Override
+    public List<String> findAllByReleaseDateIsNot(String year) {
+        return bookRepository
+                .findAllByReleaseDateIsNot(LocalDate.of(Integer.parseInt(year), 1, 1))
+                .stream()
+                .map(Book::getTitle)
+                .toList();
+    }
+
     private Book createBookFromInfo(String[] bookInfo) {
         EditionType editionType = EditionType.values()[Integer.parseInt(bookInfo[0])];
         LocalDate releaseDate = LocalDate
@@ -97,6 +133,5 @@ public class BookServiceImpl implements BookService {
                 .getRandomCategories();
 
         return new Book(editionType, releaseDate, copies, price, ageRestriction, title, author, categories);
-
     }
 }
