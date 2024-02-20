@@ -1,6 +1,7 @@
 package com.softuni.bookshopsystem.service;
 
 
+import com.softuni.bookshopsystem.model.dto.BookInformation;
 import com.softuni.bookshopsystem.model.entity.Book;
 import com.softuni.bookshopsystem.model.entity.EditionType;
 
@@ -33,4 +34,12 @@ public interface BookService {
     Integer findCountByTitleGreaterThan(int length);
 
     Integer findCopiesByAuthorFullName(String authorFullName);
+
+    BookInformation findByTitle(String title);
+
+    int increaseCopiesWithReleaseDateAfter(String increasedCopies, String dateAfter);
+
+    int deleteByCopiesLessThan(int copies);
+
+    String getCountByAuthorFullName(String fullName);
 }

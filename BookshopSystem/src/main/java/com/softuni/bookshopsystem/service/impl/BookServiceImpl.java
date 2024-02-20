@@ -1,6 +1,7 @@
 package com.softuni.bookshopsystem.service.impl;
 
 
+import com.softuni.bookshopsystem.model.dto.BookInformation;
 import com.softuni.bookshopsystem.model.entity.*;
 import com.softuni.bookshopsystem.repository.BookRepository;
 import com.softuni.bookshopsystem.service.AuthorService;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -168,6 +170,35 @@ public class BookServiceImpl implements BookService {
                 .findAllByAuthorFirstNameAndAuthorLastName(tokens[0], tokens[1])
                 .stream()
                 .mapToInt(Book::getCopies).sum();
+    }
+
+    @Override
+    public BookInformation findByTitle(String title) {
+        return bookRepository
+                .findByTitle(title)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+        public int increaseCopiesWithReleaseDateAfter(String dateAfter, String increasedCopies) {
+        return bookRepository
+                .increaseCopiesWithReleaseDateAfter(
+                        LocalDate.parse(dateAfter, DateTimeFormatter.ofPattern("dd MMM yyyy")),
+                        Integer.parseInt(increasedCopies))
+                * Integer.parseInt(increasedCopies);
+    }
+
+    @Override
+    public int deleteByCopiesLessThan(int copies) {
+        return bookRepository.deleteByCopiesLessThan(copies);
+    }
+
+    @Override
+    public String getCountByAuthorFullName(String fullName) {
+        String[] tokens = fullName.split("\\s+");
+        return String.format("%s has written %d books",
+                fullName,
+                bookRepository.getCountByAuthorName(tokens[0], tokens[1]));
     }
 
     private Book createBookFromInfo(String[] bookInfo) {

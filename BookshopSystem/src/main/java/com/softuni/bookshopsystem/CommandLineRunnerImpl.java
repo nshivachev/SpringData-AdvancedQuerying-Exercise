@@ -31,10 +31,10 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     public void run(String... args) throws Exception {
         seedData();
 
-//        printAllBooksAfterYear(2000);
-//        printAllAuthorsNamesWithBooksWithReleaseDateBeforeYear(1990);
+        printAllBooksAfterYear(2000);
+        printAllAuthorsNamesWithBooksWithReleaseDateBeforeYear(1990);
 //        printAllAuthorsAndNumberOfTheirBooks();
-//        printAllBooksByAuthorNameOrderByReleaseDate("George", "Powell");
+        printAllBooksByAuthorNameOrderByReleaseDate("George", "Powell");
 
         //Task 1
         printAllBooksByAgeRestriction();
@@ -65,6 +65,38 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
         //10
         printBookCopiesByAuthorFullName();
+
+        //Task 11
+        printBookByTitle();
+
+        //Task 12
+        printIncreasedBookCopiesWithReleaseDateAfter();
+
+        //Task 13
+        deleteBooksByCopiesLessThan();
+
+        //Task 14
+//        getBooksCountByAuthorFullName();
+    }
+
+    private void getBooksCountByAuthorFullName() {
+        System.out.println(bookService
+                .getCountByAuthorFullName(scanner.nextLine()));
+    }
+
+    private void deleteBooksByCopiesLessThan() {
+        System.out.println(bookService
+                .deleteByCopiesLessThan(scanner.nextInt()));
+    }
+
+    private void printIncreasedBookCopiesWithReleaseDateAfter() {
+        System.out.println(bookService
+                .increaseCopiesWithReleaseDateAfter(scanner.nextLine(), scanner.nextLine()));
+    }
+
+    private void printBookByTitle() {
+        System.out.println(bookService
+                .findByTitle(scanner.nextLine()));
     }
 
     private void printBookCopiesByAuthorFullName() {
