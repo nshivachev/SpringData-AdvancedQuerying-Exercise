@@ -22,5 +22,15 @@ public interface BookService {
 
     List<String> findAllByPriceLessThanOrPriceGreaterThan(int priceLessThan, int priceGreaterThan);
 
-    List<String> findAllByReleaseDateIsNot(String year);
+    List<String> findAllByReleaseDateNot(int year);
+
+    public List<String> findAllWithReleaseDateBefore(String releaseDate);
+
+    List<String> findAllByTitleContains(String text);
+
+    List<String> findAllByAuthorLastNameStartsWith(String prefix);
+
+    Integer findCountByTitleGreaterThan(int length);
+
+    Integer findCopiesByAuthorFullName(String authorFullName);
 }

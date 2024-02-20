@@ -108,12 +108,66 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<String> findAllByReleaseDateIsNot(String year) {
+    public List<String> findAllByReleaseDateNot(int year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year + 1, 1, 1);
+
         return bookRepository
-                .findAllByReleaseDateIsNot(LocalDate.of(Integer.parseInt(year), 1, 1))
+                .findAllByReleaseDateBeforeOrReleaseDateAfter(startDate, endDate)
                 .stream()
                 .map(Book::getTitle)
                 .toList();
+    }
+
+    @Override
+    public List<String> findAllWithReleaseDateBefore(String releaseDate) {
+        int[] tokens = Arrays.stream(releaseDate.split("-")).mapToInt(Integer::parseInt).toArray();
+        LocalDate localDate = LocalDate.of(tokens[2], tokens[1], tokens[1]);
+
+        return bookRepository
+                .findAllByReleaseDateBefore(localDate)
+                .stream()
+                .map(book -> String.format("%s %s %.2f",
+                        book.getTitle(),
+                        book.getEditionType(),
+                        book.getPrice()))
+                .toList();
+    }
+
+    @Override
+    public List<String> findAllByTitleContains(String text) {
+        return bookRepository
+                .findAllByTitleContainsIgnoreCase(text)
+                .stream()
+                .map(Book::getTitle)
+                .toList();
+    }
+
+    @Override
+    public List<String> findAllByAuthorLastNameStartsWith(String prefix) {
+        return bookRepository
+                .findAllByAuthorLastNameStartsWith(prefix)
+                .stream()
+                .map(book -> String.format("%s (%s %s)",
+                        book.getTitle(),
+                        book.getAuthor().getFirstName(),
+                        book.getAuthor().getLastName()))
+                .toList();
+    }
+
+    @Override
+    public Integer findCountByTitleGreaterThan(int length) {
+        return bookRepository
+                .findCountByTitleGreaterThan(length);
+    }
+
+    @Override
+    public Integer findCopiesByAuthorFullName(String authorFullName) {
+        String[] tokens = authorFullName.split("\\s+");
+        return bookRepository
+                .findAllByAuthorFirstNameAndAuthorLastName(tokens[0], tokens[1])
+                .stream()
+                .mapToInt(Book::getCopies).sum();
     }
 
     private Book createBookFromInfo(String[] bookInfo) {

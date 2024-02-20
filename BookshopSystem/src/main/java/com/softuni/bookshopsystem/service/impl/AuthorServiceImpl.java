@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -60,4 +61,13 @@ public class AuthorServiceImpl implements AuthorService {
 //                        author.getBooks().size()))
 //                .collect(Collectors.toList());
 //    }
+
+    @Override
+    public List<String> findAllByFirstNameEndsWithIgnoreCase(String firstName) {
+        return authorRepository
+                .findAllByFirstNameEndsWithIgnoreCase(firstName)
+                .stream()
+                .map(author -> String.format("%s %s", author.getFirstName(), author.getLastName()))
+                .toList();
+    }
 }

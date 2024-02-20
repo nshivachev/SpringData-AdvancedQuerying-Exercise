@@ -46,12 +46,64 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         printAllBooksByPriceLessThanOrPriceGreaterThan(5, 40);
 
         //Task 4
-        printAllByReleaseDateIsNot(scanner.nextLine());
+        printAllBooksByReleaseDateNot(scanner.nextInt());
+
+        //Task 5
+        printAllBooksWithReleaseDateBefore();
+
+        //Task 6
+        printAllAuthorsByFirstNameEndsWithIgnoreCase();
+
+        //Task 7
+        printAllBooksByTitleContains();
+
+        //Task 8
+        printAllBooksByAuthorLastNameStartsWith();
+
+        //Task 9
+        printBooksCountByTitleGreaterThan();
+
+        //10
+        printBookCopiesByAuthorFullName();
     }
 
-    private void printAllByReleaseDateIsNot(String year) {
+    private void printBookCopiesByAuthorFullName() {
+        System.out.println(bookService
+                .findCopiesByAuthorFullName(scanner.nextLine()));
+    }
+
+    private void printBooksCountByTitleGreaterThan() {
+        System.out.println(bookService
+                .findCountByTitleGreaterThan(scanner.nextInt()));
+    }
+
+    private void printAllBooksByAuthorLastNameStartsWith() {
         bookService
-                .findAllByReleaseDateIsNot(year)
+                .findAllByAuthorLastNameStartsWith(scanner.nextLine())
+                .forEach(System.out::println);
+    }
+
+    private void printAllBooksByTitleContains() {
+        bookService
+                .findAllByTitleContains(scanner.nextLine())
+                .forEach(System.out::println);
+    }
+
+    private void printAllAuthorsByFirstNameEndsWithIgnoreCase() {
+        authorService
+                .findAllByFirstNameEndsWithIgnoreCase(scanner.nextLine())
+                .forEach(System.out::println);
+    }
+
+    private void printAllBooksWithReleaseDateBefore() {
+        bookService
+                .findAllWithReleaseDateBefore(scanner.nextLine())
+                .forEach(System.out::println);
+    }
+
+    private void printAllBooksByReleaseDateNot(int year) {
+        bookService
+                .findAllByReleaseDateNot(year)
                 .forEach(System.out::println);
     }
 

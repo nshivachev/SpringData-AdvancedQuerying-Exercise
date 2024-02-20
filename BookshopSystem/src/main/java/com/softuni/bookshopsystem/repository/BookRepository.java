@@ -4,6 +4,7 @@ import com.softuni.bookshopsystem.model.entity.AgeRestriction;
 import com.softuni.bookshopsystem.model.entity.Book;
 import com.softuni.bookshopsystem.model.entity.EditionType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -25,5 +26,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     List<Book> findAllByPriceLessThanOrPriceGreaterThan(BigDecimal priceLessThan, BigDecimal priceGreaterThan);
 
-    List<Book> findAllByReleaseDateIsNot(LocalDate releaseDate);
+    List<Book> findAllByReleaseDateBeforeOrReleaseDateAfter(LocalDate startDate, LocalDate endDate);
+
+    List<Book> findAllByTitleContainsIgnoreCase(String text);
+
+    List<Book> findAllByAuthorLastNameStartsWith(String prefix);
+
+    @Query("select count(b) from Book b where length(b.title) > :length")
+    Integer findCountByTitleGreaterThan(int length);
+
+    List<Book> findAllByAuthorFirstNameAndAuthorLastName(String firstName, String lastName);
 }
